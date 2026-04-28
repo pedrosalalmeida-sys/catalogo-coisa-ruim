@@ -42,7 +42,6 @@ function init() {
 async function renderProducts() {
     if (!productList) return;
     
-    // Mostra um loader simples enquanto carrega
     productList.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: #555;">Carregando catálogo...</div>`;
 
     try {
@@ -164,7 +163,8 @@ function setupEventListeners() {
     const logo = document.getElementById('home-link');
     let logoClicks = 0;
     if (logo) {
-        logo.onclick = () => {
+        logo.onclick = (e) => {
+            // Se clicar na logo, reseta tudo e volta pra home
             currentCategory = 'todos';
             searchQuery = '';
             if (searchInput) searchInput.value = '';
@@ -176,24 +176,31 @@ function setupEventListeners() {
             renderProducts();
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
+            // Lógica de 3 cliques
             logoClicks++;
             if (logoClicks === 3) {
                 const trigger = document.getElementById('admin-trigger');
                 if (trigger) trigger.style.display = 'flex';
-                setTimeout(() => { logoClicks = 0; }, 3000);
+                logoClicks = 0; // Reseta após liberar
             }
+            // Reseta contagem após 3 segundos se não completar 3 cliques
+            setTimeout(() => { if(logoClicks < 3) logoClicks = 0; }, 3000);
         };
     }
 
     const adminTrig = document.getElementById('admin-trigger');
     if (adminTrig) {
         adminTrig.style.display = 'none';
-        adminTrig.onclick = () => {
+        adminTrig.onclick = (e) => {
+            e.stopPropagation();
             const pass = prompt('Digite a senha de administrador:');
+            if (pass === null) return; // Cancelou
+            
             if (pass === 'admin123') {
                 homeSection.classList.add('hidden');
                 adminSection.classList.add('active');
                 renderAdminProducts();
+                adminTrig.style.display = 'none'; // Esconde de novo
             } else {
                 alert('Senha incorreta!');
             }
@@ -209,7 +216,7 @@ function setupEventListeners() {
         };
     }
 
-    // Admin Form with Cloud Storage
+    // Admin Form
     const form = document.getElementById('product-form');
     const imgInp = document.getElementById('prod-images');
     const preview = document.getElementById('img-preview');
@@ -217,7 +224,7 @@ function setupEventListeners() {
     if (imgInp) {
         imgInp.onchange = (e) => {
             const files = Array.from(e.target.files);
-            uploadedImages = files; // Save files, not base64 yet
+            uploadedImages = files;
             preview.innerHTML = '';
             files.forEach(f => {
                 const reader = new FileReader();
@@ -233,7 +240,8 @@ function setupEventListeners() {
         form.onsubmit = async (e) => {
             e.preventDefault();
             const saveBtn = e.target.querySelector('button[type="submit"]');
-            saveBtn.textContent = 'Salvando na Nuvem...';
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'Enviando...';
             saveBtn.disabled = true;
 
             const id = document.getElementById('prod-id').value;
@@ -244,8 +252,6 @@ function setupEventListeners() {
 
             try {
                 let imageUrls = [];
-                
-                // Upload Images to Firebase Storage
                 if (uploadedImages.length > 0) {
                     for (let file of uploadedImages) {
                         const storageRef = storage.ref(`produtos/${Date.now()}_${file.name}`);
@@ -254,7 +260,6 @@ function setupEventListeners() {
                         imageUrls.push(url);
                     }
                 } else if (id) {
-                    // Keep old images if no new ones
                     const oldDoc = await db_fs.collection('produtos').doc(id).get();
                     imageUrls = oldDoc.data().imagens;
                 }
@@ -276,12 +281,12 @@ function setupEventListeners() {
                 uploadedImages = [];
                 document.getElementById('prod-id').value = '';
                 renderAdminProducts();
-                alert('Produto salvo com sucesso no Banco de Dados!');
+                alert('Produto salvo com sucesso!');
             } catch (error) {
                 console.error("Erro ao salvar:", error);
-                alert('Erro ao salvar no Firebase. Verifique se o Firestore e o Storage estão em Modo de Teste.');
+                alert('Erro ao salvar. Verifique se o Firebase está em Modo de Teste.');
             } finally {
-                saveBtn.textContent = 'Salvar Produto';
+                saveBtn.textContent = originalText;
                 saveBtn.disabled = false;
             }
         };
