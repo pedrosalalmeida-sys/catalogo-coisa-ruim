@@ -117,6 +117,16 @@
         <button class="choice-btn" id="close-choice" style="background: transparent; border: none; margin-top: 0.5rem; color: #666;">Cancelar</button>
     </div>
 
+    <!-- Custom Admin Login Modal -->
+    <div class="modal" id="admin-login-modal" style="display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); z-index: 10000;">
+        <div style="background: #121212; padding: 2.5rem; border-radius: 20px; width: 90%; max-width: 400px; border: 1px solid #333; text-align: center;">
+            <h3 style="margin-bottom: 1.5rem; font-family: 'Oswald', sans-serif;">Acesso Restrito</h3>
+            <input type="password" id="admin-pass-input" placeholder="Digite a senha" style="margin-bottom: 1rem; text-align: center;">
+            <button class="btn-wa-float" id="confirm-admin-login" style="background: #ff3e3e; margin-top: 0;">Entrar</button>
+            <button class="btn-wa-float" id="close-admin-login" style="background: transparent; border: none; font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Cancelar</button>
+        </div>
+    </div>
+
     <!-- Floating Admin Trigger -->
     <div class="admin-trigger" id="admin-trigger">
         <i data-lucide="settings" size="18"></i>
