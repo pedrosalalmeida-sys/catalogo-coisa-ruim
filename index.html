@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>COISA RUIM TATTOO</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="header-flex">
+                <div class="logo" id="home-link">
+                    <span class="special-font">Catalogo</span>
+                    <div class="logo-main">COISA RUIM TATTOO</div>
+                </div>
+                <button class="header-wa-btn" id="header-whatsapp">
+                    <i data-lucide="message-circle"></i>
+                </button>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-bar" id="search-input" placeholder="O que você está procurando?">
+            </div>
+        </div>
+    </header>
+
+    <main id="app-content">
+        <!-- Catalog View -->
+        <section id="home-section" class="container">
+            <nav class="category-nav" id="category-filter">
+                <button class="category-btn active" data-category="todos">Todos</button>
+                <button class="category-btn" data-category="Camisetas">Camisetas</button>
+                <button class="category-btn" data-category="Copos e Canecas">Copos e Canecas</button>
+                <button class="category-btn" data-category="Ecobags">Ecobags</button>
+                <button class="category-btn" data-category="Adesivos">Adesivos</button>
+                <button class="category-btn" data-category="Outros">Outros</button>
+            </nav>
+
+            <div class="product-grid" id="product-list">
+                <!-- Products dynamically injected -->
+            </div>
+        </section>
+
+        <!-- Admin View -->
+        <section id="admin-section" class="container admin-section">
+            <h2 style="margin-bottom: 1.5rem;">Gerenciar Catálogo</h2>
+            <form id="product-form">
+                <input type="hidden" id="prod-id">
+                <div class="form-group">
+                    <input type="text" id="prod-name" placeholder="Nome do Produto" required>
+                </div>
+                <div class="form-group">
+                    <select id="prod-category" required>
+                        <option value="Camisetas">Camisetas</option>
+                        <option value="Copos e Canecas">Copos e Canecas</option>
+                        <option value="Ecobags">Ecobags</option>
+                        <option value="Adesivos">Adesivos</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="prod-price" placeholder="Preço (Ex: R$ 89,90)" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="prod-desc" rows="4" placeholder="Descrição do produto..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; display: block;">Upload de Imagens</label>
+                    <input type="file" id="prod-images" accept="image/*" multiple>
+                    <div class="img-preview-grid" id="img-preview" style="margin-top: 0.5rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;"></div>
+                </div>
+                <button type="submit" class="btn-wa-float" style="background: #333; margin-top: 0;">Salvar Produto</button>
+                <button type="button" class="btn-wa-float" id="exit-admin" style="background: transparent; border: 1px solid #333; margin-top: 0.5rem;">Voltar ao Catálogo</button>
+            </form>
+
+            <div id="admin-product-list" style="margin-top: 2rem;"></div>
+        </section>
+    </main>
+
+    <!-- Bottom Sheet (Product Detail) -->
+    <div class="bottom-sheet-overlay" id="sheet-overlay"></div>
+    <div class="bottom-sheet" id="product-sheet">
+        <div class="handle"></div>
+        <div class="sheet-content">
+            <div class="swiper-container sheet-swiper" id="product-swiper">
+                <div class="swiper-wrapper" id="swiper-images"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <div class="sheet-header">
+                <h2 class="sheet-name" id="detail-name"></h2>
+                <div class="sheet-price" id="detail-price"></div>
+            </div>
+            <div class="sheet-desc" id="detail-desc"></div>
+            <div style="background: #1a1a1a; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; font-size: 0.85rem; color: #888;">
+                📦 Informações de entrega direto no WhatsApp
+            </div>
+            <button class="btn-wa-float" id="open-wa-options">
+                <i data-lucide="message-circle"></i>
+                Falar no WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- Choice Sheet -->
+    <div class="choice-sheet" id="choice-sheet">
+        <div style="text-align: center; margin-bottom: 1.5rem; font-weight: 600;">Com quem deseja falar?</div>
+        <a href="#" class="choice-btn" id="wa-pitorexco">Pitorexco</a>
+        <a href="#" class="choice-btn" id="wa-mendez">Mendez</a>
+        <button class="choice-btn" id="close-choice" style="background: transparent; border: none; margin-top: 0.5rem; color: #666;">Cancelar</button>
+    </div>
+
+    <!-- Floating Admin Trigger -->
+    <div class="admin-trigger" id="admin-trigger">
+        <i data-lucide="settings" size="18"></i>
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
