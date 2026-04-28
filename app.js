@@ -147,12 +147,14 @@ function setupEventListeners() {
 
     if (confirmLogin) {
         confirmLogin.onclick = () => {
-            if (adminPassInput.value === 'admin123') {
+            if (adminPassInput.value.trim() === 'admin123') {
                 homeSection.classList.add('hidden'); adminSection.classList.add('active');
                 renderAdminProducts(); adminLoginModal.style.display = 'none'; adminTrig.style.display = 'none';
                 adminPassInput.value = '';
             } else { alert('Senha incorreta!'); adminPassInput.value = ''; }
         };
+        // Suporte para tecla Enter
+        adminPassInput.onkeypress = (e) => { if (e.key === 'Enter') confirmLogin.click(); };
     }
 
     if (closeLogin) closeLogin.onclick = () => { adminLoginModal.style.display = 'none'; adminPassInput.value = ''; };
