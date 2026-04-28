@@ -179,8 +179,10 @@ function setupEventListeners() {
 
     // Navigation (RESET LOGIC)
     const logo = document.getElementById('home-link');
+    let logoClicks = 0;
     if (logo) {
         logo.onclick = () => {
+            // Reset to home
             currentCategory = 'todos';
             searchQuery = '';
             if (searchInput) searchInput.value = '';
@@ -193,15 +195,29 @@ function setupEventListeners() {
             homeSection.classList.remove('hidden');
             renderProducts();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Secret Admin Trigger: 3 clicks
+            logoClicks++;
+            if (logoClicks === 3) {
+                const trigger = document.getElementById('admin-trigger');
+                if (trigger) trigger.style.display = 'flex';
+                setTimeout(() => { logoClicks = 0; }, 3000); // Reset after 3s
+            }
         };
     }
 
     const adminTrig = document.getElementById('admin-trigger');
     if (adminTrig) {
+        adminTrig.style.display = 'none'; // Hide by default
         adminTrig.onclick = () => {
-            homeSection.classList.add('hidden');
-            adminSection.classList.add('active');
-            renderAdminProducts();
+            const pass = prompt('Digite a senha de administrador:');
+            if (pass === 'admin123') {
+                homeSection.classList.add('hidden');
+                adminSection.classList.add('active');
+                renderAdminProducts();
+            } else {
+                alert('Senha incorreta!');
+            }
         };
     }
 
